@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeTest", "MergeTest\MergeTest.csproj", "{2E522062-2D9C-4ED0-947C-DA59FA8044C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeLib", "MergeLib\MergeLib.csproj", "{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "merge", "merge\merge.csproj", "{5DC29A6D-77C3-4524-B4F6-8B48B257F9B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EB1B6EC5-426C-4104-A90B-E8A99C5295DC} = {EB1B6EC5-426C-4104-A90B-E8A99C5295DC}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E522062-2D9C-4ED0-947C-DA59FA8044C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E522062-2D9C-4ED0-947C-DA59FA8044C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E522062-2D9C-4ED0-947C-DA59FA8044C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E522062-2D9C-4ED0-947C-DA59FA8044C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DC29A6D-77C3-4524-B4F6-8B48B257F9B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DC29A6D-77C3-4524-B4F6-8B48B257F9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DC29A6D-77C3-4524-B4F6-8B48B257F9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DC29A6D-77C3-4524-B4F6-8B48B257F9B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
