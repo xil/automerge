@@ -6,8 +6,8 @@
     <ProjectGuid>{2E522062-2D9C-4ED0-947C-DA59FA8044C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MergeTest</RootNamespace>
-    <AssemblyName>MergeTest</AssemblyName>
+    <RootNamespace>MergeLibTest</RootNamespace>
+    <AssemblyName>MergeLibTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,11 +52,16 @@
   <ItemGroup>
     <Compile Include="MergeLibTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="mergeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MergeLib\MergeLib.csproj">
       <Project>{eb1b6ec5-426c-4104-a90b-e8a99c5295dc}</Project>
       <Name>MergeLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\merge\merge.csproj">
+      <Project>{5dc29a6d-77c3-4524-b4f6-8b48b257f9b9}</Project>
+      <Name>merge</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

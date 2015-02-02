@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeTest", "MergeTest\MergeTest.csproj", "{2E522062-2D9C-4ED0-947C-DA59FA8044C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeLibTest", "MergeTest\MergeLibTest.csproj", "{2E522062-2D9C-4ED0-947C-DA59FA8044C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeLib", "MergeLib\MergeLib.csproj", "{EB1B6EC5-426C-4104-A90B-E8A99C5295DC}"
 EndProject
