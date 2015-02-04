@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Security.Cryptography;
+using System.IO;
+using System.Text;
 
 namespace MergeLibTest
 {
@@ -8,9 +11,12 @@ namespace MergeLibTest
     public class mergeTest
     {
         [TestMethod]
-        public void MainTest()
+        public void merge_first_Test()
         {
-            merge.Program.Main(new string[] { "a.txt", "b.txt", "o.txt", "out.txt" });
+            merge.Program.Main(new string[] { "silent", "a.txt", "b.txt", "o.txt", "out.txt" });
         }
+
+        
+
     }
 }

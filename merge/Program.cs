@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.IO;
 using MergeLib;
 using System.Runtime.CompilerServices;
+using merge.Properties;
 
 [assembly: InternalsVisibleTo("MergeLibTest")]
 namespace merge
@@ -15,24 +16,83 @@ namespace merge
     {
         internal static void Main(string[] args)
         {
-            if (args.Length == 0)
+            try
             {
-                foreach (string s in File.ReadAllLines("readme.txt",Encoding.GetEncoding("windows-1251")))
-                    Console.WriteLine(s);
-            }
-            else if (args.Length == 4)
-            {
-                if (File.Exists(args[0]) && File.Exists(args[1]) && File.Exists(args[2]))
+                if (args.Length < 4)   // print help
                 {
-                    string[] outputFile;
-                    MergeLib.Merger merger = new MergeLib.Merger(File.ReadAllLines(args[0]), File.ReadAllLines(args[1]), File.ReadAllLines(args[2]));
-                    merger.merge(out outputFile, true);
-                    File.WriteAllLines(args[3], outputFile);
+                    if (File.Exists("readme.txt"))
+                    {
+                        foreach (string s in File.ReadAllLines("readme.txt", Encoding.GetEncoding("windows-1251")))
+                            Console.WriteLine(s);
+                    }
+                    else
+                        Console.WriteLine(Resources.Readme);
+                    Console.ReadLine();
                 }
-                    
-            }
+                else if (args.Length >= 4)  //work
+                {
+                    if (File.Exists(args[args.Length - 2]) &&
+                        File.Exists(args[args.Length - 3]) &&
+                        File.Exists(args[args.Length - 4]))
+                    {
 
-            //Console.ReadLine();
+                        string message = "";
+                        bool workFinished = false;
+                        bool silence = args.Contains<string>("silent");
+                        List<string> outputFile;
+                        MergerFactory mf = new MergerFactory();
+                        IMerger m = mf.getInstance(args.ToList<string>());
+                        if (!silence)
+                            m.ProgressChanged += m_ProgressChanged;
+
+                        Thread thread = new Thread(delegate()
+                            {
+                                message = m.merge(
+                                        File.ReadAllLines(args[args.Length - 4]).ToList<string>(),
+                                        File.ReadAllLines(args[args.Length - 3]).ToList<string>(),
+                                        File.ReadAllLines(args[args.Length - 2]).ToList<string>(),
+                                        out outputFile);
+                                File.WriteAllLines(args[args.Length - 1], outputFile);
+                                workFinished = true;
+                            });
+                        thread.Start();
+
+                        if (silence)
+                        {
+                            while (!workFinished)
+                            {
+                                Thread.Sleep(500);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(Resources.InProgress);
+                            while (!workFinished)
+                            {
+                                Thread.Sleep(99);
+                            }
+                            if (message != "")
+                            {
+                                Console.WriteLine(message);
+                                Console.ReadLine();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(Resources.FileNotExists);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        static void m_ProgressChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(e.ToString());
         }
     }
 }

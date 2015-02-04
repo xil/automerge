@@ -132,4 +132,19 @@
   <data name="divLineO" xml:space="preserve">
     <value>================================    FileO    ================================</value>
   </data>
+  <data name="Merging" xml:space="preserve">
+    <value>Слияние, {0} из {1} строк</value>
+  </data>
+  <data name="MergingDone" xml:space="preserve">
+    <value>Слияние файлов завершено</value>
+  </data>
+  <data name="message_Overlapping" xml:space="preserve">
+    <value>В файлах-потомках изменения пересекаются.</value>
+  </data>
+  <data name="Parsing" xml:space="preserve">
+    <value>Анализ, {0} из {1} строк</value>
+  </data>
+  <data name="ParsingDone" xml:space="preserve">
+    <value>Анализ файлов завершен</value>
+  </data>
 </root>

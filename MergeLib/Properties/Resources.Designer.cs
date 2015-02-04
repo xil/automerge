@@ -104,5 +104,50 @@ namespace MergeLib.Properties {
                 return ResourceManager.GetString("divLineO", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Слияние, {0} из {1} строк.
+        /// </summary>
+        internal static string Merging {
+            get {
+                return ResourceManager.GetString("Merging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Слияние файлов завершено.
+        /// </summary>
+        internal static string MergingDone {
+            get {
+                return ResourceManager.GetString("MergingDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to В файлах-потомках изменения пересекаются..
+        /// </summary>
+        internal static string message_Overlapping {
+            get {
+                return ResourceManager.GetString("message_Overlapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Анализ, {0} из {1} строк.
+        /// </summary>
+        internal static string Parsing {
+            get {
+                return ResourceManager.GetString("Parsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Анализ файлов завершен.
+        /// </summary>
+        internal static string ParsingDone {
+            get {
+                return ResourceManager.GetString("ParsingDone", resourceCulture);
+            }
+        }
     }
 }
