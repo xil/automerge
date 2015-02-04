@@ -1,6 +1,0 @@
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\bin\Debug\merge.exe.config
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\bin\Debug\merge.exe
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\bin\Debug\merge.pdb
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\obj\Debug\merge.csprojResolveAssemblyReference.cache
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\obj\Debug\merge.exe
-C:\Users\Татьяна\documents\visual studio 2012\Projects\merge\merge\obj\Debug\merge.pdb
