@@ -53,6 +53,7 @@
     <Compile Include="MergeLibTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="mergeTest.cs" />
+    <Compile Include="LCSTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MergeLib\MergeLib.csproj">
