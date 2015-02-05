@@ -68,9 +68,11 @@ namespace MergeLib
         /// <param name="fileB">File B</param>
         /// <param name="fileO">Common ancestor</param>
         /// <param name="outputFile">Choose method for string comparsion</param>
+        /// <param name="includeOriginalFileInOutput">Duct tape for two files merging *facepalm*</param>
         /// <returns>True if overlapping found</returns>
 
-        public string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile)
+        public string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
+            bool includeOriginalFileInOutput )
         {
             if (_trimWhiteSpaces)
             {
@@ -96,9 +98,10 @@ namespace MergeLib
             #region parsing
             do
             {
-                
+
                 j = 0;
                 // Trying to find next straight line with unequal elements
+
                 do
                 {
                     j++;
@@ -110,68 +113,97 @@ namespace MergeLib
                     fileA[A + j].Equals(fileO[O + j]) &&
                     fileB[B + j].Equals(fileO[O + j])
                     );
-                
-                OnProgressChanged(new ProgressEventArgs(String.Format(Resources.Parsing, O, fileO.Count)));
-                
-                if (j == 1)    // Trying to find equal elements in A and B for nearest element in O !! there must be values from LCS function !!
+
+
+                /*j = fileO.Select((item, index) => new { item, index }).
+                    Where(x => !x.item.SequenceEqual(fileA[x.index]) || !x.item.SequenceEqual(fileB[x.index])).
+                    Select(x => x.index).DefaultIfEmpty(fileO.Count).First();*/
+
+                if ((O + j) <= fileO.Count &&        
+                    (A + j) <= fileA.Count &&        // Includes equality because otherwise last straight line won't become block
+                    (B + j) <= fileB.Count)
                 {
-                    indexO = O + 1;
-                    int indexA = -1;
-                    int indexB = -1;
+                    OnProgressChanged(new ProgressEventArgs(String.Format(Resources.Parsing, O, fileO.Count)));
 
-                    while (indexO < fileO.Count && (indexA == -1 || indexB == -1))
+                    if (j == 1)    // Trying to find equal elements in A and B for nearest element in O !! there must be values from LCS function !!
                     {
-                        indexA = fileA.FindIndex(A + 1, item => item.Equals(fileO[indexO]));
-                        indexB = fileB.FindIndex(B + 1, item => item.Equals(fileO[indexO]));
-                        indexO++;
+                        indexO = O;
+                        int indexA = -1;
+                        int indexB = -1;
+
+
+                        while (indexO < fileO.Count - 1 && (indexA == -1 || indexB == -1))  // .Count - 1 because otherwise indexOutOfRangeException
+                        {
+                            indexO++;
+                            indexA = fileA.FindIndex(A + 1, item => item.Equals(fileO[indexO]));
+                            indexB = fileB.FindIndex(B + 1, item => item.Equals(fileO[indexO]));
+
+                        }
+                        if (indexO >= fileO.Count - 1 && (indexA == -1 || indexB == -1))
+                            break;
+
+                        if (indexO < fileO.Count)     // Push unstable block
+                        {
+                            _addBlock(ref blocksA, A + 1, indexA - 1);
+                            _addBlock(ref blocksB, B + 1, indexB - 1);
+                            if (includeOriginalFileInOutput)
+                                _addBlock(ref blocksO, O + 1, indexO - 1);
+                            else _addBlock(ref blocksO, 1, 0);
+
+                            O = indexO - 1;
+                            A = indexA - 1;
+                            B = indexB - 1;
+
+                            continue;
+                        }
+                        else
+                            break;
                     }
-
-
-                    if (indexO < fileO.Count)     // Push unstable block
+                    else if (j > 1)     // Push stable block
                     {
-                        _addBlock(ref blocksA, A + 1, indexA - 1);
-                        _addBlock(ref blocksB, B + 1, indexB - 1);
-                        _addBlock(ref blocksO, O + 1, indexO - 1);
+                        _addBlock(ref blocksA, A + 1, A + j - 1);
+                        _addBlock(ref blocksB, B + 1, B + j - 1);
+                        if (includeOriginalFileInOutput)
+                            _addBlock(ref blocksO, O + 1, O + j - 1);
+                        else _addBlock(ref blocksO, 1, 0);
 
-                        O = indexO - 1;
-                        A = indexA - 1;
-                        B = indexB - 1;
+                        O = O + j - 1;
+                        A = A + j - 1;
+                        B = B + j - 1;
+
+                        continue;
                     }
                 }
-                else if (j > 1)     // Push stable block
-                {
-                    _addBlock(ref blocksA, A + 1, A + j - 1);
-                    _addBlock(ref blocksB, B + 1, B + j - 1);
-                    _addBlock(ref blocksO, O + 1, O + j - 1);
-
-                    O = O + j - 1;
-                    A = A + j - 1;
-                    B = B + j - 1;
-                }
+                else
+                    break;
             }
-            while ((O + j) < fileO.Count && (A + j) < fileA.Count && (B + j) < fileB.Count && indexO < fileO.Count);
+            while (true);   // duct tape is everywere
 
             if (O < fileO.Count - 1 || A < fileA.Count - 1 || B < fileB.Count - 1) // next straight line with not equal elements does not exist
             {
                 _addBlock(ref blocksA, A + 1, fileA.Count - 1);
                 _addBlock(ref blocksB, B + 1, fileB.Count - 1);
-                _addBlock(ref blocksO, O + 1, fileO.Count - 1);
+                if (includeOriginalFileInOutput) 
+                    _addBlock(ref blocksO, O + 1, fileO.Count - 1);
+                else _addBlock(ref blocksO, 1, 0);
             }
             #endregion
+
             OnStateChanged(new ProgressEventArgs(Resources.ParsingDone));
+
             #region merging
-            outputFile = new List<string>();                                         // A O B => ?
+            outputFile = new List<string>();                                                                // A O B => ?
             for (int i = 0; i < blocksO.Count; i++)
             {
                 OnProgressChanged(new ProgressEventArgs(String.Format(Resources.Merging, i, blocksO.Count)));
 
-                if (blocksO[i][0] == -1 && blocksA[i][0] != -1 && blocksB[i][0] == -1)              // X - - => X
+                if (blocksO[i][0] == -1 && blocksA[i][0] != -1 && blocksB[i][0] == -1)                      // X - - => X
                 {
                     foreach (int strIndex in blocksA[i]) outputFile.Add(fileA[strIndex]);
                     continue;
                 }
 
-                if (blocksO[i][0] == -1 && blocksA[i][0] == -1 && blocksB[i][0] != -1)              // - - X => X
+                if (blocksO[i][0] == -1 && blocksA[i][0] == -1 && blocksB[i][0] != -1)                      // - - X => X
                 {
                     foreach (int strIndex in blocksB[i]) outputFile.Add(fileB[strIndex]);
                     continue;
@@ -189,7 +221,34 @@ namespace MergeLib
                     }
                 }
 
-                if (blocksB[i][0] == -1 && blocksA[i][0] != -1 && blocksO[i][0] != -1 && blocksA[i].Length == blocksO[i].Length)                    // X X - => -
+                if (blocksO[i][0] == -1 && blocksA[i][0] != -1 && blocksB[i][0] != -1)                      // X - Y => |X - Y|
+                {
+                    List<string> changesA = new List<string>();
+                    List<string> changesB = new List<string>();
+
+                    List<string> changesR;
+
+                    foreach (int a in blocksA[i])
+                    {
+                        changesA.Add(fileA[a]);
+                    }
+
+                    foreach (int b in blocksB[i])
+                    {
+                        changesB.Add(fileB[b]);
+                    }
+                    if (changesA.Intersect(changesB).Count() != 0)
+                    {
+                        merge(changesA, changesB, changesB, out changesR, false);
+
+                        foreach (string str in changesR) outputFile.Add(str);
+
+                        continue;
+                    }
+                }
+
+                if (blocksB[i][0] == -1 && blocksA[i][0] != -1 && blocksO[i][0] != -1 && 
+                    blocksA[i].Length == blocksO[i].Length)                                                 // X X - => -
                 {
                     int n = 0;
                     while (n < blocksA[i].Length && fileA[blocksA[i][n]].Equals(fileO[blocksO[i][n]]))
@@ -200,7 +259,8 @@ namespace MergeLib
                     }
                 }
 
-                if (blocksA[i][0] == -1 && blocksB[i][0] != -1 && blocksO[i][0] != -1 && blocksB[i].Length == blocksO[i].Length)                    // - X X => -
+                if (blocksA[i][0] == -1 && blocksB[i][0] != -1 && blocksO[i][0] != -1 && 
+                    blocksB[i].Length == blocksO[i].Length)                                                 // - X X => -
                 {
                     int n = 0;
                     while (n < blocksB[i].Length && fileB[blocksB[i][n]].Equals(fileO[blocksO[i][n]]))

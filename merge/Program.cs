@@ -51,7 +51,7 @@ namespace merge
                                         File.ReadAllLines(args[args.Length - 4]).ToList<string>(),
                                         File.ReadAllLines(args[args.Length - 3]).ToList<string>(),
                                         File.ReadAllLines(args[args.Length - 2]).ToList<string>(),
-                                        out outputFile);
+                                        out outputFile, true);
                                 File.WriteAllLines(args[args.Length - 1], outputFile);
                                 workFinished = true;
                             });

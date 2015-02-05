@@ -12,10 +12,10 @@ namespace MergeTest
         [TestMethod]
         public void MergeLib_first_Test()
         {
-            List<string> O = new List<string>(new string[10] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+            List<string> O = new List<string>(new string[5] { "1", "2", "3", "4", "10" });
             List<string> A = new List<string>(new string[11] { "0", "1", "1.5", "2", "3", "4", "4.5", "5", "10", "11", "12" });
-            List<string> B = new List<string>(new string[10] { "1", "4", "4.1", "4.2", "4.3", "4.4", "7", "8", "9", "10" });
-            List<string> expectation = new List<string>(new string[34] { "0", "1", 
+            List<string> B = new List<string>(new string[10] { "1", "4", "4.1", "4.2", "4.3", "4.4", "5", "8", "9", "10" });
+            List<string> expectation = new List<string>(new string[27] { "0", "1", 
                                           "================================ Overlapping ================================",
 			                              "================================    FileA    ================================",
                                           "1.5", "2", "3", 
@@ -25,18 +25,15 @@ namespace MergeTest
                                           "4",
                                           "================================ Overlapping ================================",
 			                              "================================    FileA    ================================",
-                                          "4.5", "5",
+                                          "4.5",
                                           "================================    FileB    ================================",
-                                          "4.1", "4.2", "4.3", "4.4", "7", "8", "9",
-                                          "================================    FileO    ================================",
-                                          "5","6","7","8","9",
+                                          "4.1", "4.2", "4.3", "4.4", 
                                           "================================     End     ================================",
-                                          "10","11","12"});
+                                          "5","8","9","10","11","12"});
             List<string> R;
 
-            MergerFactory mf = new MergerFactory();
-            var mrg = mf.getInstance(null);
-            mrg.merge(A, B, O, out R);
+            ThreeWayMerge twm = new ThreeWayMerge();
+            twm.merge(A, B, O, out R, true);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -51,8 +48,8 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
-
+            twm.merge(A, B, O, out R, true);
+            
             CollectionAssert.AreEqual(expectation, R);
         }
 
@@ -66,8 +63,8 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
-
+            twm.merge(A, B, O, out R, true);
+            
             CollectionAssert.AreEqual(expectation, R);
         }
 
@@ -77,30 +74,28 @@ namespace MergeTest
             List<string> O = new List<string>(File.ReadAllLines(@"TestData\About.java.parent"));
             List<string> A = new List<string>(File.ReadAllLines(@"TestData\About.java.1st"));
             List<string> B = new List<string>(File.ReadAllLines(@"TestData\About.java.2nd"));
-            List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\About.java.out.expected"));
+            List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\About.java.expected"));
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
-
+            twm.merge(A, B, O, out R, true);
+            
             CollectionAssert.AreEqual(expectation, R);
         }
 
         [TestMethod]
-        public void NoAssert_MergeLib_IdenticalSubSetInChanges_Test()
+        public void MergeLib_IdenticalSubSetInChanges_Test()
         {
             List<string> O = new List<string>(File.ReadAllLines(@"TestData\getCLIArgs.java.parent"));
             List<string> A = new List<string>(File.ReadAllLines(@"TestData\getCLIArgs.java.1st"));
             List<string> B = new List<string>(File.ReadAllLines(@"TestData\getCLIArgs.java.2nd"));
-            //List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\About.java.out.expected"));
+            List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\getCLIArgs.java.expected"));
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
+            twm.merge(A, B, O, out R, true);
 
-            File.WriteAllLines(@"TestData\getCLIArgs.java.expected", R);
-
-            //CollectionAssert.AreEqual(expectation, R);
+            CollectionAssert.AreEqual(expectation, R);
         }
 
         [TestMethod]
@@ -113,7 +108,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
+            twm.merge(A, B, O, out R, true);
 
             File.WriteAllLines(@"TestData\ReleaseNotes 9_4.html.expected", R);
 
@@ -121,20 +116,18 @@ namespace MergeTest
         }
 
         [TestMethod]
-        public void NoAssert_MergeLib_Strange_Test()
+        public void MergeLib_Strange_Test()
         {
             List<string> O = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp_Parent.h"));
             List<string> A = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp_BranchA.h"));
             List<string> B = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp_BranchB.h"));
-            //List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\About.java.out.expected"));
+            List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp.h.expected"));
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
+            twm.merge(A, B, O, out R, true);
 
-            File.WriteAllLines(@"TestData\Bug_ReporterApp.h.expected", R);
-
-            //CollectionAssert.AreEqual(expectation, R);
+            CollectionAssert.AreEqual(expectation, R);
         }
 
         [TestMethod]
@@ -165,7 +158,7 @@ namespace MergeTest
 
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R);
+            twm.merge(A, B, O, out R, true);
 
             File.WriteAllLines(@"TestData\Big_File.B.expected", R);
 

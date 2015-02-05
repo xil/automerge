@@ -16,7 +16,8 @@ namespace MergeLib
         /// <param name="fileO">Common ancestor</param>
         /// <param name="outputFile">Choose method for string comparsion</param>
         /// <returns>Message, "" - if no message for you</returns>
-        string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile);
+        string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
+            bool includeOriginalFileInOutput);
 
         event EventHandler ProgressChanged;
     }
