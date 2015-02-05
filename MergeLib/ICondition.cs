@@ -8,5 +8,6 @@ namespace MergeLib
 {
     interface ICondition
     {
+
     }
 }
