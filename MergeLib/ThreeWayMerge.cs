@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MergeLib.Properties;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MergeLibTest")]
 namespace MergeLib
 {
-    /// <summary>
-    /// MergeLib main class
-    /// </summary>
-
     internal class ThreeWayMerge :IMerger
     {
-        bool _trimWhiteSpaces;
-        equalityMethods _equalityMethod;
-        DateTime _lastTimeProgressEventOccurred = DateTime.Now;
+        protected readonly bool _trimWhiteSpaces;
+        protected EqualityMethods _equalityMethod;
+        protected DateTime _lastTimeProgressEventOccurred = DateTime.Now;
 
         public event EventHandler ProgressChanged;
 
-        protected virtual void OnProgressChanged(ProgressEventArgs e)
+        protected void OnProgressChanged(ProgressEventArgs e)
         {
             if (ProgressChanged != null)
             {
@@ -34,13 +28,11 @@ namespace MergeLib
             }
         }
 
-        protected virtual void OnStateChanged(ProgressEventArgs e)
+        protected void OnStateChanged(ProgressEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-                _lastTimeProgressEventOccurred = DateTime.Now;
-            }
+            if (ProgressChanged == null) return;
+            ProgressChanged(this, e);
+            _lastTimeProgressEventOccurred = DateTime.Now;
         }
 
         /// <summary>
@@ -49,7 +41,7 @@ namespace MergeLib
         /// <param name="trimWhiteSpaces">Remove the indentation at the start and end of each line</param>
         /// <param name="equalityMethod">Choose method for string comparsion</param>
 
-        public ThreeWayMerge(bool trimWhiteSpaces, equalityMethods equalityMethod) 
+        public ThreeWayMerge(bool trimWhiteSpaces, EqualityMethods equalityMethod) 
         {
             _trimWhiteSpaces = trimWhiteSpaces;
             _equalityMethod = equalityMethod;
@@ -58,7 +50,7 @@ namespace MergeLib
         public ThreeWayMerge()
         {
             _trimWhiteSpaces=true;
-            _equalityMethod = equalityMethods.String_equal;
+            _equalityMethod = EqualityMethods.StringEqual;
         }
 
         /// <summary>
@@ -71,18 +63,9 @@ namespace MergeLib
         /// <param name="includeOriginalFileInOutput">Duct tape for two files merging *facepalm*</param>
         /// <returns>True if overlapping found</returns>
 
-        public string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
+        public string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
             bool includeOriginalFileInOutput )
         {
-            if (_trimWhiteSpaces)
-            {
-                for (int i = 0; i < fileA.Count; i++)
-                    fileA[i].Trim();
-                for (int i = 0; i < fileB.Count; i++)
-                    fileB[i].Trim();
-                for (int i = 0; i < fileO.Count; i++)
-                    fileO[i].Trim();
-            }
 
             List<int[]> blocksA = new List<int[]>(); //Parsed blocks from fileA
             List<int[]> blocksB = new List<int[]>(); //Parsed blocks from fileB
@@ -110,14 +93,9 @@ namespace MergeLib
                     (O + j) < fileO.Count &&
                     (A + j) < fileA.Count &&
                     (B + j) < fileB.Count &&
-                    fileA[A + j].Equals(fileO[O + j]) &&
-                    fileB[B + j].Equals(fileO[O + j])
+                    StringComparator.Compare(fileA[A + j], fileO[O + j], _trimWhiteSpaces) &&
+                    StringComparator.Compare(fileB[B + j], fileO[O + j], _trimWhiteSpaces)
                     );
-
-
-                /*j = fileO.Select((item, index) => new { item, index }).
-                    Where(x => !x.item.SequenceEqual(fileA[x.index]) || !x.item.SequenceEqual(fileB[x.index])).
-                    Select(x => x.index).DefaultIfEmpty(fileO.Count).First();*/
 
                 if ((O + j) <= fileO.Count &&        
                     (A + j) <= fileA.Count &&        // Includes equality because otherwise last straight line won't become block
@@ -135,8 +113,8 @@ namespace MergeLib
                         while (indexO < fileO.Count - 1 && (indexA == -1 || indexB == -1))  // .Count - 1 because otherwise indexOutOfRangeException
                         {
                             indexO++;
-                            indexA = fileA.FindIndex(A + 1, item => item.Equals(fileO[indexO]));
-                            indexB = fileB.FindIndex(B + 1, item => item.Equals(fileO[indexO]));
+                            indexA = fileA.FindIndex(A + 1, item => StringComparator.Compare(item,fileO[indexO],_trimWhiteSpaces));
+                            indexB = fileB.FindIndex(B + 1, item => StringComparator.Compare(item,fileO[indexO],_trimWhiteSpaces));
 
                         }
                         if (indexO >= fileO.Count - 1 && (indexA == -1 || indexB == -1))
@@ -199,49 +177,40 @@ namespace MergeLib
 
                 if (blocksO[i][0] == -1 && blocksA[i][0] != -1 && blocksB[i][0] == -1)                      // X - - => X
                 {
-                    foreach (int strIndex in blocksA[i]) outputFile.Add(fileA[strIndex]);
+                    outputFile.AddRange(blocksA[i].Select(strIndex => fileA[strIndex]));
                     continue;
                 }
 
                 if (blocksO[i][0] == -1 && blocksA[i][0] == -1 && blocksB[i][0] != -1)                      // - - X => X
                 {
-                    foreach (int strIndex in blocksB[i]) outputFile.Add(fileB[strIndex]);
+                    outputFile.AddRange(blocksB[i].Select(strIndex => fileB[strIndex]));
                     continue;
                 }
 
                 if (blocksA[i][0] != -1 && blocksB[i][0] != -1 && blocksA[i].Length == blocksB[i].Length)   // X ? X => X
                 {
                     int n = 0;
-                    while (n < blocksA[i].Length && fileA[blocksA[i][n]].Equals(fileB[blocksB[i][n]]))
+                    while (n < blocksA[i].Length && 
+                        StringComparator.Compare(fileA[blocksA[i][n]], fileB[blocksB[i][n]],_trimWhiteSpaces))
                         n++;
                     if (n == blocksA[i].Length)
                     {
-                        foreach (int strIndex in blocksA[i]) outputFile.Add(fileA[strIndex]);
+                        outputFile.AddRange(blocksA[i].Select(strIndex => fileA[strIndex]));
                         continue;
                     }
                 }
 
                 if (blocksO[i][0] == -1 && blocksA[i][0] != -1 && blocksB[i][0] != -1)                      // X - Y => |X - Y|
                 {
-                    List<string> changesA = new List<string>();
-                    List<string> changesB = new List<string>();
-
-                    List<string> changesR;
-
-                    foreach (int a in blocksA[i])
-                    {
-                        changesA.Add(fileA[a]);
-                    }
-
-                    foreach (int b in blocksB[i])
-                    {
-                        changesB.Add(fileB[b]);
-                    }
+                    List<string> changesA = blocksA[i].Select(a => fileA[a]).ToList();
+                    List<string> changesB = blocksB[i].Select(b => fileB[b]).ToList();
+                    
                     if (changesA.Intersect(changesB).Count() != 0)
                     {
-                        merge(changesA, changesB, changesB, out changesR, false);
+                        List<string> changesR;
+                        Merge(changesA, changesB, changesB, out changesR, false);
 
-                        foreach (string str in changesR) outputFile.Add(str);
+                        outputFile.AddRange(changesR);
 
                         continue;
                     }
@@ -251,7 +220,8 @@ namespace MergeLib
                     blocksA[i].Length == blocksO[i].Length)                                                 // X X - => -
                 {
                     int n = 0;
-                    while (n < blocksA[i].Length && fileA[blocksA[i][n]].Equals(fileO[blocksO[i][n]]))
+                    while (n < blocksA[i].Length && 
+                        StringComparator.Compare(fileA[blocksA[i][n]], fileO[blocksO[i][n]],_trimWhiteSpaces))
                         n++;
                     if (n == blocksA[i].Length)
                     {
@@ -263,7 +233,8 @@ namespace MergeLib
                     blocksB[i].Length == blocksO[i].Length)                                                 // - X X => -
                 {
                     int n = 0;
-                    while (n < blocksB[i].Length && fileB[blocksB[i][n]].Equals(fileO[blocksO[i][n]]))
+                    while (n < blocksB[i].Length && 
+                        StringComparator.Compare(fileB[blocksB[i][n]],fileO[blocksO[i][n]],_trimWhiteSpaces))
                         n++;
                     if (n == blocksB[i].Length)
                     {
@@ -278,19 +249,19 @@ namespace MergeLib
                 if (blocksA[i][0] != -1)
                 {
                     outputFile.Add(Resources.divLineA);
-                    foreach (int strIndex in blocksA[i]) outputFile.Add(fileA[strIndex]);
+                    outputFile.AddRange(blocksA[i].Select(strIndex => fileA[strIndex]));
                 }
 
                 if (blocksB[i][0] != -1)
                 {
                     outputFile.Add(Resources.divLineB);
-                    foreach (int strIndex in blocksB[i]) outputFile.Add(fileB[strIndex]);
+                    outputFile.AddRange(blocksB[i].Select(strIndex => fileB[strIndex]));
                 }
 
                 if (blocksO[i][0] != -1)
                 {
                     outputFile.Add(Resources.divLineO);
-                    foreach (int strIndex in blocksO[i]) outputFile.Add(fileO[strIndex]);
+                    outputFile.AddRange(blocksO[i].Select(strIndex => fileO[strIndex]));
                 }
 
                 outputFile.Add(Resources.divLineEnd);
@@ -317,7 +288,7 @@ namespace MergeLib
 
     public class ProgressEventArgs : EventArgs
     {
-        string _progress;
+        readonly string _progress;
         public ProgressEventArgs(string progress)
         {
             _progress = progress;
@@ -333,10 +304,10 @@ namespace MergeLib
     /// 
     /// </summary>
 
-    public enum equalityMethods
+    public enum EqualityMethods
     {
+        StringEqual,
         CryptoHash,
         CheckSum,
-        String_equal,
     }
 }

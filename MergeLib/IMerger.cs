@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MergeLib
 {
@@ -15,8 +12,9 @@ namespace MergeLib
         /// <param name="fileB">File B</param>
         /// <param name="fileO">Common ancestor</param>
         /// <param name="outputFile">Choose method for string comparsion</param>
+        /// <param name="includeOriginalFileInOutput">If false - will NOT add FileO sections in blocks with overlapping</param>
         /// <returns>Message, "" - if no message for you</returns>
-        string merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
+        string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
             bool includeOriginalFileInOutput);
 
         event EventHandler ProgressChanged;

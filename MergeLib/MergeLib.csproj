@@ -39,9 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ICondition.cs" />
     <Compile Include="IMerger.cs" />
     <Compile Include="LCSFinder.cs" />
+    <Compile Include="LCSMerge.cs" />
+    <Compile Include="MergingConditions.cs" />
+    <Compile Include="StringComparator.cs" />
     <Compile Include="ThreeWayMerge.cs" />
     <Compile Include="MergerFactory.cs" />
     <Compile Include="Parser.cs" />

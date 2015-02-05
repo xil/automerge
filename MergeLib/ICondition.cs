@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MergeLib
 {
-    public class Class1
+    interface ICondition
     {
     }
 }

@@ -12,16 +12,16 @@ namespace MergeLib
 
         public IMerger getInstance(List<string> initParams)
         {
-            equalityMethods eqMethod = equalityMethods.String_equal;
+            EqualityMethods eqMethod = EqualityMethods.StringEqual;
             bool trimWhiteSpaces = true;
 
             if (initParams != null)
             {
                 trimWhiteSpaces = initParams.Contains("trim");
-                foreach (string m in Enum.GetNames(typeof(equalityMethods)))
+                foreach (string m in Enum.GetNames(typeof(EqualityMethods)))
                     if (initParams.Contains(m))
                     {
-                        eqMethod = (equalityMethods)Enum.Parse(typeof(equalityMethods), m);
+                        eqMethod = (EqualityMethods)Enum.Parse(typeof(EqualityMethods), m);
                         break;
                     }
             }

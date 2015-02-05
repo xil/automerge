@@ -57,7 +57,7 @@ Public Class frmMain
 	Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
-		Me.mnuMain = New System.Windows.Forms.MainMenu()
+			Me.mnuMain = New System.Windows.Forms.MainMenu()
 		Me.MenuItem1 = New System.Windows.Forms.MenuItem()
 		Me.SuspendLayout()
 		'
@@ -68,7 +68,7 @@ Public Class frmMain
 		'mnuFile
 		'
 		Me.mnuFile.Index = 0
-		Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuNew, Me.mnuClose, Me.MenuItem1, Me.mnuSave, Me.MenuItem2, Me.mnuExit})
+			Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuNew, Me.mnuClose, Me.MenuItem1, Me.mnuSave, Me.MenuItem2, Me.mnuExit})
 		Me.mnuFile.Text = "&File"
 		'
 		mnuHelp
@@ -76,7 +76,7 @@ Public Class frmMain
 		Me.mnuExit.Index = 4
 		Me.mnuExit.Text = "H&elp"
 		'
-		'mnuExit
+			'mnuExit
 		'
 		Me.mnuExit.Index = 5
 		Me.mnuExit.Text = "E&xit"

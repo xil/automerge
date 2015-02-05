@@ -17,14 +17,14 @@ Option Strict On
 Public Class frmMain
 	Inherits System.Windows.Forms.Form
 
-	Public Event SaveWhileClosingCancelled As System.EventHandler
+		Public Event SaveWhileClosingCancelled As System.EventHandler
 	Public Event ExitApplication As System.EventHandler
 	Public StatusMsg
 
 	Private m_Dirty As Boolean = False
 	Private m_ClosingComplete As Boolean = False
 	Private m_DocumentName As String
-	Private m_FileName As String
+		Private m_FileName As String
 	Private m_TempFileName As String
 	Private m_DirName As String
 

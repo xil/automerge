@@ -1,10 +1,10 @@
 ﻿using System;
-using MergeLib;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using MergeLib;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MergeTest
+namespace MergeLibTest
 {
     [TestClass]
     public class MergeLibTest
@@ -33,7 +33,7 @@ namespace MergeTest
             List<string> R;
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -48,7 +48,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -63,7 +63,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -78,7 +78,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -93,7 +93,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
 
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -108,7 +108,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
 
             File.WriteAllLines(@"TestData\ReleaseNotes 9_4.html.expected", R);
 
@@ -116,7 +116,7 @@ namespace MergeTest
         }
 
         [TestMethod]
-        public void MergeLib_Strange_Test()
+        public void MergeLib_StringComparator_Test()
         {
             List<string> O = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp_Parent.h"));
             List<string> A = new List<string>(File.ReadAllLines(@"TestData\Bug_ReporterApp_BranchA.h"));
@@ -125,7 +125,7 @@ namespace MergeTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
 
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -158,7 +158,7 @@ namespace MergeTest
 
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R, true);
 
             File.WriteAllLines(@"TestData\Big_File.B.expected", R);
 

@@ -22,7 +22,7 @@ Public Class frmMain
 
 	Private m_Dirty As Boolean = False
 	Private m_ClosingComplete As Boolean = False
-	Private m_DocumentName As String
+		Private m_DocumentName As String
 	Private m_FileName As String
 
 #Region " Windows Form Designer generated code "
@@ -49,7 +49,7 @@ Public Class frmMain
 
 	Private components As System.ComponentModel.IContainer
 
-	Friend WithEvents mnuMain As System.Windows.Forms.MainMenu
+		Friend WithEvents mnuMain As System.Windows.Forms.MainMenu
 	Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
@@ -63,7 +63,7 @@ Public Class frmMain
 		'
 		'mnuFile
 		'
-		Me.mnuFile.Index = 0
+			Me.mnuFile.Index = 0
 		Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuNew, Me.mnuClose, Me.MenuItem1, Me.mnuSave, Me.MenuItem2, Me.mnuExit})
 		Me.mnuFile.Text = "&File"
 		'

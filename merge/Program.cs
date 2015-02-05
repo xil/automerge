@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows;
 using System.IO;
 using MergeLib;
 using System.Runtime.CompilerServices;
@@ -47,7 +46,7 @@ namespace merge
 
                         Thread thread = new Thread(delegate()
                             {
-                                message = m.merge(
+                                message = m.Merge(
                                         File.ReadAllLines(args[args.Length - 4]).ToList<string>(),
                                         File.ReadAllLines(args[args.Length - 3]).ToList<string>(),
                                         File.ReadAllLines(args[args.Length - 2]).ToList<string>(),
