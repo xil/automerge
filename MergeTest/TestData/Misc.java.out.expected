@@ -102,11 +102,11 @@ public class Misc {
           GuiffySS.programQuit();
           if(fr != null) {
             fr.dispose();
-          }
+================================     End     ================================
+    }
         } else {
           pcom.setVisible(false);
         }
-================================     End     ================================
     }
   } // End of Exit_Action method
 

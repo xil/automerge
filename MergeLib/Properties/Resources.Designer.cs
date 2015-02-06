@@ -106,6 +106,15 @@ namespace MergeLib.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrong file path in args[].
+        /// </summary>
+        internal static string FileNotFound_Exception {
+            get {
+                return ResourceManager.GetString("FileNotFound_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Слияние, {0} из {1} строк.
         /// </summary>
         internal static string Merging {

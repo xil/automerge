@@ -11,7 +11,10 @@ using merge.Properties;
 [assembly: InternalsVisibleTo("MergeLibTest")]
 namespace merge
 {
-    internal class Program
+    /// <summary>
+    /// Console app class
+    /// </summary>
+    internal static class Program
     {
         internal static void Main(string[] args)
         {
@@ -30,26 +33,27 @@ namespace merge
                 }
                 else if (args.Length >= 4)  //work
                 {
-                    if (File.Exists(args[args.Length - 2]) &&
-                        File.Exists(args[args.Length - 3]) &&
-                        File.Exists(args[args.Length - 4]))
+                    FileInfo fiA = new FileInfo(args[args.Length - 4]);
+                    FileInfo fiB = new FileInfo(args[args.Length - 3]);
+                    FileInfo fiO = new FileInfo(args[args.Length - 2]);
+
+                    if (fiA.Exists && fiB.Exists && fiO.Exists)
                     {
 
                         string message = "";
                         bool workFinished = false;
-                        bool silence = args.Contains<string>("silent");
+                        bool silence = args.Contains("silent");
                         List<string> outputFile;
-                        MergerFactory mf = new MergerFactory();
-                        IMerger m = mf.getInstance(args.ToList<string>());
+                        IMerger m = MergerFactory.GetInstance(args.ToList(), (int)Math.Max(Math.Max(fiA.Length,fiO.Length),fiB.Length));
                         if (!silence)
                             m.ProgressChanged += m_ProgressChanged;
 
-                        Thread thread = new Thread(delegate()
+                        Thread thread = new Thread(delegate()   // async merging call 
                             {
                                 message = m.Merge(
-                                        File.ReadAllLines(args[args.Length - 4]).ToList<string>(),
-                                        File.ReadAllLines(args[args.Length - 3]).ToList<string>(),
-                                        File.ReadAllLines(args[args.Length - 2]).ToList<string>(),
+                                        File.ReadAllLines(args[args.Length - 4]).ToList(),
+                                        File.ReadAllLines(args[args.Length - 3]).ToList(),
+                                        File.ReadAllLines(args[args.Length - 2]).ToList(),
                                         out outputFile);
                                 File.WriteAllLines(args[args.Length - 1], outputFile);
                                 workFinished = true;
@@ -60,7 +64,7 @@ namespace merge
                         {
                             while (!workFinished)
                             {
-                                Thread.Sleep(500);
+                                Thread.Sleep(99);
                             }
                         }
                         else
@@ -68,7 +72,7 @@ namespace merge
                             Console.WriteLine(Resources.InProgress);
                             while (!workFinished)
                             {
-                                Thread.Sleep(99);
+                                Thread.Sleep(30);
                             }
                             if (message != "")
                             {
@@ -86,6 +90,8 @@ namespace merge
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.Message.ToString());
+                Console.WriteLine(ex.StackTrace.ToString());
             }
         }
 

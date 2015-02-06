@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using MergeLib.Properties;
 
 
@@ -62,7 +60,7 @@ namespace MergeLib
         {
             if (oStrList == null && aStrList != null && bStrList != null)
             {
-                LCSMerge mrg = new LCSMerge();
+                LcsMerge mrg = new LcsMerge();
                 return mrg.Merge(aStrList, bStrList);
             }
             return null;
@@ -138,7 +136,6 @@ namespace MergeLib
 
 
 
-
     internal class X_N__X : IConditionForTwo
     {
         public List<string> Check(List<string> aStrList, List<string> bStrList, bool trim)
@@ -185,7 +182,7 @@ namespace MergeLib
                 return null;
 
             List<string> result = new List<string> { Resources.divLineBegin };
-            if (aStrList.Count > 0)
+            if (aStrList != null && aStrList.Count > 0)
             {
                 result.Add(Resources.divLineA);
                 result.AddRange(aStrList);

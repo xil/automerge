@@ -147,4 +147,7 @@
   <data name="ParsingDone" xml:space="preserve">
     <value>Анализ файлов завершен</value>
   </data>
+  <data name="FileNotFound_Exception" xml:space="preserve">
+    <value>Wrong file path in args[]</value>
+  </data>
 </root>

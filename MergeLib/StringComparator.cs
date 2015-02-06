@@ -3,7 +3,7 @@
     static class StringComparator
     {
         // not ready
-        public static bool Equal(string strA, string strB, bool trimWhiteSpaces, EqualityMethods equalityMethod)
+        private static bool Equal(string strA, string strB, bool trimWhiteSpaces, EqualityMethods equalityMethod)
         {
             if (!trimWhiteSpaces) return strA.Equals(strB);
             string trimmedStr = strA.Trim();

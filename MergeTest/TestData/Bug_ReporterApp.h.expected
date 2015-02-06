@@ -23,11 +23,22 @@ Public Class frmMain
 
 	Private m_Dirty As Boolean = False
 	Private m_ClosingComplete As Boolean = False
+================================ Overlapping ================================
+================================    FileA    ================================
 	Private m_DocumentName As String
 	Private m_FileName As String
 	Private m_TempFileName As String
 	Private m_DirName As String
 	Private m_ErrorMessage As String
+================================    FileB    ================================
+	Private m_DocumentName As String
+		Private m_FileName As String
+	Private m_TempFileName As String
+	Private m_DirName As String
+================================    FileO    ================================
+		Private m_DocumentName As String
+	Private m_FileName As String
+================================     End     ================================
 
 #Region " Windows Form Designer generated code "
 
@@ -71,7 +82,14 @@ Public Class frmMain
 			Me.mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuNew, Me.mnuClose, Me.MenuItem1, Me.mnuSave, Me.MenuItem2, Me.mnuExit})
 		Me.mnuFile.Text = "&File"
 		'
+================================ Overlapping ================================
+================================    FileA    ================================
 		mnuHelp
+================================    FileB    ================================
+		'mnuExit
+================================    FileO    ================================
+		'mnuExit
+================================     End     ================================
 		'
 		Me.mnuExit.Index = 4
 		Me.mnuExit.Text = "H&elp"

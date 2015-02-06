@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using MergeLib;
 using System.IO;
@@ -7,15 +6,15 @@ using System.IO;
 namespace MergeLibTest
 {
     [TestClass]
-    public class LCSTest
+    public class LcsTest
     {
         [TestMethod]
         public void LCSMerge_first_Test()
         {
-            List<string> o = new List<string>(new string[] { "1", "2", "3", "4", "10" });
-            List<string> a = new List<string>(new string[] { "0", "1", "1.5", "2", "3", "4", "4.5", "5", "10", "11", "12" });
-            List<string> b = new List<string>(new string[] { "1", "4", "4.1", "4.2", "4.3", "4.4", "5", "8", "9", "10" });
-            List<string> expectation = new List<string>(new string[27] { "0", "1", 
+            List<string> o = new List<string>(new[] { "1", "2", "3", "4", "10" });
+            List<string> a = new List<string>(new[] { "0", "1", "1.5", "2", "3", "4", "4.5", "5", "10", "11", "12" });
+            List<string> b = new List<string>(new[] { "1", "4", "4.1", "4.2", "4.3", "4.4", "5", "8", "9", "10" });
+            List<string> expectation = new List<string>(new[] { "0", "1", 
                                           "================================ Overlapping ================================",
 			                              "================================    FileA    ================================",
                                           "1.5", "2", "3", 
@@ -32,8 +31,8 @@ namespace MergeLibTest
                                           "5","8","9","10","11","12"});
 
             List<string> r;
-            var twm = new LCSMerge();
-            twm.Merge(a, b, o, out r);
+            var mrg = new LcsMerge();
+            mrg.Merge(a, b, o, out r);
 
             CollectionAssert.AreEqual(expectation, r);
         }
@@ -45,9 +44,9 @@ namespace MergeLibTest
             List<string> A = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4_1.html"));
             List<string> B = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4_2.html"));
             List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4.html.expected"));
-            List<string> R = new List<string>();
+            List<string> R;
 
-            var twm = new LCSMerge();
+            var twm = new LcsMerge();
             twm.Merge(A, B, O, out R);
 
             CollectionAssert.AreEqual(expectation, R);

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 
 namespace MergeLib
 {
-    internal static class LCSFinder
+    /// <summary>
+    /// Longest common subsequence nondeterministic algorithm from wikipedia
+    /// </summary>
+    internal static class LcsFinder
     {
-        public static List<string> FindLCS(List<string> fileA, List<string> fileO)
+        public static List<string> FindLcs(List<string> fileA, List<string> fileO)
         {
-            int[,] solutionTable = LCSLength(fileA, fileO);
+            int[,] solutionTable = LcsLength(fileA, fileO);
             return Backtrack(ref solutionTable, ref fileA, ref fileO, fileA.Count, fileO.Count);
         }
 
-        static int[,] LCSLength(IReadOnlyList<string> fileA, IReadOnlyList<string> fileO)
+        static int[,] LcsLength(IReadOnlyList<string> fileA, IReadOnlyList<string> fileO)
         {
             int m = fileA.Count+1;
             int n = fileO.Count+1;

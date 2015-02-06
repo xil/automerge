@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MergeLib.Properties;
 using System.Runtime.CompilerServices;
@@ -7,24 +8,24 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("MergeLibTest")]
 namespace MergeLib
 {
+    /// <summary>
+    /// This class not using longest common subsequence algorothm.
+    /// </summary>
     internal class ThreeWayMerge :IMerger
     {
         protected readonly bool _trimWhiteSpaces;
-        protected EqualityMethods _equalityMethod;
-        protected DateTime _lastTimeProgressEventOccurred = DateTime.Now;
-        protected bool _includeOriginalFileInOutput;
+        private EqualityMethods _equalityMethod;
+        private DateTime _lastTimeProgressEventOccurred;
+        protected readonly bool _includeOriginalFileInOutput;
         public event EventHandler ProgressChanged;
 
         protected void OnProgressChanged(ProgressEventArgs e)
         {
-            if (ProgressChanged != null)
+            if (ProgressChanged == null) return;
+            if (DateTime.Now.Subtract(_lastTimeProgressEventOccurred).Milliseconds > 500)
             {
-                if (DateTime.Now.Subtract(_lastTimeProgressEventOccurred).Milliseconds > 500)
-                {
-                    ProgressChanged(this, e);
-                    _lastTimeProgressEventOccurred = DateTime.Now;
-                }
-
+                ProgressChanged(this, e);
+                _lastTimeProgressEventOccurred = DateTime.Now;
             }
         }
 
@@ -40,12 +41,14 @@ namespace MergeLib
         /// </summary>
         /// <param name="trimWhiteSpaces">Remove the indentation at the start and end of each line</param>
         /// <param name="equalityMethod">Choose method for string comparsion</param>
-
+        /// <param name="includeOriginalFileInOutput"></param>
+        
         public ThreeWayMerge(bool trimWhiteSpaces, EqualityMethods equalityMethod, bool includeOriginalFileInOutput) 
         {
             _trimWhiteSpaces = trimWhiteSpaces;
             _equalityMethod = equalityMethod;
             _includeOriginalFileInOutput = includeOriginalFileInOutput;
+            _lastTimeProgressEventOccurred = DateTime.Now;
         }
 
         public ThreeWayMerge()
@@ -53,6 +56,7 @@ namespace MergeLib
             _trimWhiteSpaces=true;
             _equalityMethod = EqualityMethods.StringEqual;
             _includeOriginalFileInOutput = true;
+            _lastTimeProgressEventOccurred = DateTime.Now;
         }
 
         /// <summary>
@@ -62,8 +66,7 @@ namespace MergeLib
         /// <param name="fileB">File B</param>
         /// <param name="fileO">Common ancestor</param>
         /// <param name="outputFile">Choose method for string comparsion</param>
-        /// <param name="includeOriginalFileInOutput">Duct tape for two files merging *facepalm*</param>
-        /// <returns>True if overlapping found</returns>
+        /// <returns>Overlapping info</returns>
 
         public string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile)
         {
@@ -75,17 +78,15 @@ namespace MergeLib
             int O = -1;  //fileO index 
             int A = -1;  //fileA index
             int B = -1;  //fileB index
-            int j;       //straight line index
-            int indexO = 0;
+            int indexO;
             bool overlappingFound = false;
 
             #region parsing
             do
             {
 
-                j = 0;
+                int j = 0;       //straight line index
                 // Trying to find next straight line with unequal elements
-
                 do
                 {
                     j++;
@@ -102,7 +103,7 @@ namespace MergeLib
                     (A + j) <= fileA.Count &&        // Includes equality because otherwise last straight line won't become block
                     (B + j) <= fileB.Count)
                 {
-                    OnProgressChanged(new ProgressEventArgs(String.Format(Resources.Parsing, O, fileO.Count)));
+                    
 
                     if (j == 1)    // Trying to find equal elements in A and B for nearest element in O !! there must be values from LCS function !!
                     {
@@ -116,7 +117,7 @@ namespace MergeLib
                             indexO++;
                             indexA = fileA.FindIndex(A + 1, item => StringComparator.Equal(item,fileO[indexO],_trimWhiteSpaces));
                             indexB = fileB.FindIndex(B + 1, item => StringComparator.Equal(item,fileO[indexO],_trimWhiteSpaces));
-
+                            OnProgressChanged(new ProgressEventArgs(String.Format(Resources.Parsing, indexO, fileO.Count)));
                         }
                         if (indexO >= fileO.Count - 1 && (indexA == -1 || indexB == -1))
                             break;
@@ -132,6 +133,8 @@ namespace MergeLib
                             O = indexO - 1;
                             A = indexA - 1;
                             B = indexB - 1;
+
+                            
 
                             continue;
                         }
@@ -155,6 +158,7 @@ namespace MergeLib
                 }
                 else
                     break;
+                
             }
             while (true);   // duct tape is everywere
 
@@ -243,7 +247,7 @@ namespace MergeLib
                     }
                 }
 
-                outputFile.Add(Resources.divLineBegin);
+                outputFile.Add(Resources.divLineBegin);                                                     // Overlapping
 
                 overlappingFound = true;
 
@@ -278,11 +282,11 @@ namespace MergeLib
         void _addBlock(ref List<int[]> blockList, int firstValue, int lastValue)
         {
             if (firstValue < lastValue)
-                blockList.Add(Enumerable.Range(firstValue, lastValue - firstValue + 1).ToArray<int>());
+                blockList.Add(Enumerable.Range(firstValue, lastValue - firstValue + 1).ToArray());
             else if (firstValue == lastValue)
-                blockList.Add(new int[] { firstValue });
+                blockList.Add(new[] { firstValue });
             else
-                blockList.Add(new int[] { -1 });
+                blockList.Add(new[] { -1 });
         }
 
     }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace MergeLib
 {
+    /// <summary>
+    /// Interface for different stratages of merging
+    /// </summary>
     public interface IMerger
     {
         /// <summary>
@@ -12,7 +15,6 @@ namespace MergeLib
         /// <param name="fileB">File B</param>
         /// <param name="fileO">Common ancestor</param>
         /// <param name="outputFile">Choose method for string comparsion</param>
-        /// <param name="includeOriginalFileInOutput">If false - will NOT add FileO sections in blocks with overlapping</param>
         /// <returns>Message, "" - if no message for you</returns>
         string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile);
 
