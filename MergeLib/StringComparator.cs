@@ -3,7 +3,7 @@
     static class StringComparator
     {
         // not ready
-        public static bool Compare(string strA, string strB, bool trimWhiteSpaces, EqualityMethods equalityMethod)
+        public static bool Equal(string strA, string strB, bool trimWhiteSpaces, EqualityMethods equalityMethod)
         {
             if (!trimWhiteSpaces) return strA.Equals(strB);
             string trimmedStr = strA.Trim();
@@ -18,7 +18,7 @@
         /// <param name="trimWhiteSpaces">Remove the indentation at the start and end of each line</param>
         /// <returns>true if strings are equal</returns>
 
-        public static bool Compare(string strA, string strB, bool trimWhiteSpaces)
+        public static bool Equal(string strA, string strB, bool trimWhiteSpaces)
         {
             if (!trimWhiteSpaces) return strA.Equals(strB);
             string trimmedStr = strA.Trim();

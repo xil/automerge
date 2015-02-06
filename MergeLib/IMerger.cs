@@ -14,8 +14,7 @@ namespace MergeLib
         /// <param name="outputFile">Choose method for string comparsion</param>
         /// <param name="includeOriginalFileInOutput">If false - will NOT add FileO sections in blocks with overlapping</param>
         /// <returns>Message, "" - if no message for you</returns>
-        string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile, 
-            bool includeOriginalFileInOutput);
+        string Merge(List<string> fileA, List<string> fileB, List<string> fileO, out List<string> outputFile);
 
         event EventHandler ProgressChanged;
     }

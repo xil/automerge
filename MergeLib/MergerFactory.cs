@@ -14,10 +14,20 @@ namespace MergeLib
         {
             EqualityMethods eqMethod = EqualityMethods.StringEqual;
             bool trimWhiteSpaces = true;
-
+            List<string> actualConditions = Enum.GetNames(typeof(Conditions)).ToList();
+            bool includeOriginal = true;
+            
             if (initParams != null)
             {
                 trimWhiteSpaces = initParams.Contains("trim");
+                includeOriginal = !initParams.Contains("notIncludeOriginal");
+
+                foreach (string condition in actualConditions)
+                {
+                    if (initParams.Contains(condition))
+                        actualConditions.Remove(condition);
+                }
+
                 foreach (string m in Enum.GetNames(typeof(EqualityMethods)))
                     if (initParams.Contains(m))
                     {
@@ -26,7 +36,7 @@ namespace MergeLib
                     }
             }
 
-            return new ThreeWayMerge(trimWhiteSpaces, eqMethod);
+            return new LCSMerge(trimWhiteSpaces, eqMethod, actualConditions,includeOriginal);
         }
     }
 }

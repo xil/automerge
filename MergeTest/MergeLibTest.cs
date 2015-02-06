@@ -33,7 +33,7 @@ namespace MergeLibTest
             List<string> R;
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -48,7 +48,7 @@ namespace MergeLibTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -63,7 +63,7 @@ namespace MergeLibTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -78,7 +78,7 @@ namespace MergeLibTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
             
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -93,27 +93,12 @@ namespace MergeLibTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
 
             CollectionAssert.AreEqual(expectation, R);
         }
 
-        [TestMethod]
-        public void NoAssert_MergeLib_LongestCommonSubsequence_Test()
-        {
-            List<string> O = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4.html"));
-            List<string> A = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4_1.html"));
-            List<string> B = new List<string>(File.ReadAllLines(@"TestData\ReleaseNotes 9_4_2.html"));
-            //List<string> expectation = new List<string>(File.ReadAllLines(@"TestData\About.java.out.expected"));
-            List<string> R = new List<string>();
-
-            ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
-
-            File.WriteAllLines(@"TestData\ReleaseNotes 9_4.html.expected", R);
-
-            //CollectionAssert.AreEqual(expectation, R);
-        }
+        
 
         [TestMethod]
         public void MergeLib_StringComparator_Test()
@@ -125,7 +110,7 @@ namespace MergeLibTest
             List<string> R = new List<string>();
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
 
             CollectionAssert.AreEqual(expectation, R);
         }
@@ -158,7 +143,7 @@ namespace MergeLibTest
 
 
             ThreeWayMerge twm = new ThreeWayMerge();
-            twm.Merge(A, B, O, out R, true);
+            twm.Merge(A, B, O, out R);
 
             File.WriteAllLines(@"TestData\Big_File.B.expected", R);
 
